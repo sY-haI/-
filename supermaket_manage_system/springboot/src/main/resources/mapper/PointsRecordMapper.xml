@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.PointsRecordMapper">
+
+    <!-- 插入积分记录 -->
+    <insert id="insert" parameterType="com.example.entity.PointsRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into `points_record`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="orderId != null">order_id,</if>
+            <if test="points != null">points,</if>
+            <if test="type != null">type,</if>
+            <if test="description != null">description,</if>
+            <if test="createTime != null">create_time,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="orderId != null">#{orderId},</if>
+            <if test="points != null">#{points},</if>
+            <if test="type != null">#{type},</if>
+            <if test="description != null">#{description},</if>
+            <if test="createTime != null">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <!-- 根据ID删除积分记录 -->
+    <delete id="deleteById">
+        delete from `points_record` where id = #{id}
+    </delete>
+
+    <!-- 根据ID更新积分记录 -->
+    <update id="updateById" parameterType="com.example.entity.PointsRecord">
+        update `points_record`
+        <set>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="orderId != null">order_id = #{orderId},</if>
+            <if test="points != null">points = #{points},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 根据ID查询积分记录 -->
+    <select id="selectById" resultType="com.example.entity.PointsRecord">
+        select * from `points_record` where id = #{id}
+    </select>
+
+    <!-- 根据用户ID查询积分记录 -->
+    <select id="selectByUserId" resultType="com.example.entity.PointsRecord">
+        select * from `points_record`
+        where user_id = #{userId}
+        order by create_time desc
+    </select>
+
+    <!-- 根据订单ID查询积分记录 -->
+    <select id="selectByOrderId" resultType="com.example.entity.PointsRecord">
+        select * from `points_record`
+        where order_id = #{orderId}
+        order by create_time desc
+    </select>
+
+    <!-- 分页查询积分记录 -->
+    <select id="selectPage" resultType="com.example.entity.PointsRecord">
+        select * from `points_record`
+        <where>
+            <if test="userId != null">and user_id = #{userId}</if>
+        </where>
+        order by create_time desc
+        limit #{offset}, #{pageSize}
+    </select>
+
+    <!-- 查询积分记录总数 -->
+    <select id="selectTotal" resultType="java.lang.Integer">
+        select count(*) from `points_record`
+        <where>
+            <if test="userId != null">and user_id = #{userId}</if>
+        </where>
+    </select>
+
+    <!-- 统计用户积分总和（根据类型） -->
+    <select id="sumPointsByUserId" resultType="java.lang.Integer">
+        select IFNULL(sum(points), 0) from `points_record`
+        where user_id = #{userId}
+        <if test="type != null and type != ''">
+            and type = #{type}
+        </if>
+        and points > 0
+    </select>
+
+    <!-- 根据条件查询积分记录列表 -->
+    <select id="selectByCondition" resultType="com.example.entity.PointsRecord">
+        select * from `points_record`
+        <where>
+            <if test="userId != null">and user_id = #{userId}</if>
+            <if test="orderId != null">and order_id = #{orderId}</if>
+            <if test="type != null and type != ''">and type = #{type}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+</mapper>

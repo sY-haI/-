@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.PurchaseRecordMapper">
+
+    <select id="selectAll" resultType="com.example.entity.PurchaseRecord">
+        select * from `purchase_record`
+        <where>
+            <if test="supplierName != null and supplierName != ''">
+                and supplier_name like concat('%', #{supplierName}, '%')
+            </if>
+            <if test="goodsName != null and goodsName != ''">
+                and goods_name like concat('%', #{goodsName}, '%')
+            </if>
+            <if test="goodsId != null">and goods_id = #{goodsId}</if>
+            <if test="supplierId != null">and supplier_id = #{supplierId}</if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="selectById" resultType="com.example.entity.PurchaseRecord">
+        select * from `purchase_record` where id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        delete from `purchase_record` where id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.entity.PurchaseRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into `purchase_record`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="supplierName != null">supplier_name,</if>
+            <if test="goodsName != null">goods_name,</if>
+            <if test="goodsImg != null">goods_img,</if>
+            <if test="purchaseTime != null">purchase_time,</if>
+            <if test="productionDate != null">production_date,</if>
+            <if test="shelfLife != null">shelf_life,</if>
+            <if test="expirationDate != null">expiration_date,</if>
+            <if test="purchaseQuantity != null">purchase_quantity,</if>
+            <if test="goodsId != null">goods_id,</if>
+            <if test="supplierId != null">supplier_id,</if>
+            <if test="handled != null">handled,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="supplierName != null">#{supplierName},</if>
+            <if test="goodsName != null">#{goodsName},</if>
+            <if test="goodsImg != null">#{goodsImg},</if>
+            <if test="purchaseTime != null">#{purchaseTime},</if>
+            <if test="productionDate != null">#{productionDate},</if>
+            <if test="shelfLife != null">#{shelfLife},</if>
+            <if test="expirationDate != null">#{expirationDate},</if>
+            <if test="purchaseQuantity != null">#{purchaseQuantity},</if>
+            <if test="goodsId != null">#{goodsId},</if>
+            <if test="supplierId != null">#{supplierId},</if>
+            <if test="handled != null">#{handled},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.PurchaseRecord">
+        update `purchase_record`
+        <set>
+            <if test="supplierName != null">supplier_name = #{supplierName},</if>
+            <if test="goodsName != null">goods_name = #{goodsName},</if>
+            <if test="goodsImg != null">goods_img = #{goodsImg},</if>
+            <if test="purchaseTime != null">purchase_time = #{purchaseTime},</if>
+            <if test="productionDate != null">production_date = #{productionDate},</if>
+            <if test="shelfLife != null">shelf_life = #{shelfLife},</if>
+            <if test="expirationDate != null">expiration_date = #{expirationDate},</if>
+            <if test="purchaseQuantity != null">purchase_quantity = #{purchaseQuantity},</if>
+            <if test="goodsId != null">goods_id = #{goodsId},</if>
+            <if test="supplierId != null">supplier_id = #{supplierId},</if>
+            <if test="handled != null">handled = #{handled},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>
